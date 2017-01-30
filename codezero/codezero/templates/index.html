@@ -114,23 +114,23 @@
           {% for i in LISTA[1:] %}
           <tr class="{{ class_list[x] }} normal" id="d{{ i[0] }}">
             <td>
-      			  <div class="bck">
-      			  	<i class="fa fa-user fa-2x fa-border" aria-hidden="true"></i>
-      			  </div>
-      			  <div class="bck">
-      			  	<p class="person">{{ i[1] }}</p>
-      			  	<p class="email">{{ i[1].lower() }}@email.com</p>
-      			  </div>
+              <div class="bck">
+                <i class="fa fa-user fa-2x fa-border" aria-hidden="true"></i>
+              </div>
+              <div class="bck">
+                <p class="person">{{ i[1] }} {{ i[2] }}</p>
+                <p class="email">{{ i[3] }}</p>
+              </div>
             </td>
-            <td>{{ i[2] }}</td>
-            {% if i[3] == "new" %}
-            <td><button class="status">{{ i[3] }}</button></td>
-            {% elif i[3] == "approved" %}
-            <td><button class="status approved">{{ i[3] }}</button></td>
-            {% elif i[3] == "rejected" %}
-            <td><button class="status rejected">{{ i[3] }}</button></td>
+            <td>{{ i[6] }}</td>
+            {% if i[5] == "new" %}
+            <td><button class="status">{{ i[5] }}</button></td>
+            {% elif i[5] == "approved" %}
+            <td><button class="status approved">{{ i[5] }}</button></td>
+            {% elif i[5] == "rejected" %}
+            <td><button class="status rejected">{{ i[5] }}</button></td>
             {% endif %}
-            <td>{{ i[2] }}</td>
+            <td>{{ i[4] }}</td>
             <td>{{ i[0] }}</td>
             <td class="last_td">
               <img src="./static/images/ellipsis.svg" class="dot_dot_dot" id="{{ i[0] }}">
