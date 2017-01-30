@@ -108,12 +108,11 @@ def filter_by_school(string):
 
 def get_list():
     assign_id()
-    table = Applicant.select(Applicant.applicant_id, Applicant.name, Applicant.city, Applicant.status)
+    table = Applicant.select()
     lista = [("APPLICANT ID", "NAME", "CITY", "STATUS")]
     for item in table:
-        lista.append((item.applicant_id, item.name, item.city, item.status))
+        lista.append((item.applicant_id, item.first_name, item.last_name, item.email, item.city, item.status, item.school.name))
     return lista
-
 
 
 
