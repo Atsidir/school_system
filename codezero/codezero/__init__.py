@@ -24,7 +24,7 @@ app = Flask(__name__)
 app.secret_key = 'aosjndajndjansdojnasd.asdadas.d.d.1'
 
 class_list = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"]
-print()
+
 
 
 login_manager = LoginManager()
