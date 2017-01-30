@@ -3,7 +3,7 @@ from peewee import *
 import applicant_methods
 import mentor_methods
 import forms
-from flask_login import LoginManager, UserMixin, login_required, login_user,logout_user,current_user
+from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user, current_user
 
 try:
     from models import *
@@ -35,8 +35,8 @@ login_manager.login_view = "login"
 @login_manager.user_loader
 def load_user(user_id):
     try:
-        return User.get(User.id==user_id)
-    except DoesNotExist:
+        return User.get(User.id == user_id)
+    except models.DoesNotExist:
         return None
 
 
@@ -50,20 +50,22 @@ def login():
         # Login and validate the user.
         # user should be an instance of your `User` class
 
+        try:
+            user = User.get(form.username.data == User.login)
+        except DoesNotExist:
+            flash('Invalid username or password.')
+            return render_template('login.html', form=form)
 
-        user = User.get(form.username.data == User.login)
         login_user(user)
 
-        flash('Logged in successfully.')
 
-        #next = request.args.get('next')
+        # next = request.args.get('next')
         # is_safe_url should check if the url is safe for redirects.
         # See http://flask.pocoo.org/snippets/62/ for an example.
-        #if not is_safe_url(next):
+        # if not is_safe_url(next):
         #    return Flask.abort(400)
         return redirect(url_for('user_page'))
     return render_template('login.html', form=form)
-
 
 
 @app.route('/', methods=["GET", "POST"])
@@ -73,18 +75,19 @@ def homepage():
     if request.method == "GET":
         return render_template("index.html", LISTA=LISTA, list_length=list_length, class_list=class_list)
 
+
 @app.route("/logout")
 @login_required
 def logout():
-	logout_user()
-	flash("You've been logged out.", "success")
-	return redirect(url_for("homepage"))
+    logout_user()
+    flash("You've been logged out.", "success")
+    return redirect(url_for("login"))
 
-@app.route('/user',methods=["GET", "POST"])
+
+@app.route('/user', methods=["GET", "POST"])
 @login_required
 def user_page():
-
-    return str("{} magic happens {}").format(current_user.login,current_user.password)
+    return render_template("user.html", user=current_user)
 
 
 @app.route('/mentors', methods=["GET", "POST"])
