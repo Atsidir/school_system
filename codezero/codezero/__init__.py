@@ -24,6 +24,15 @@ try:
 except Exception:
     from .mentor_methods import *
 
+
+def user_list():
+    array = []
+    array.append(('Username', 'Password'))
+    for item in User.select():
+        array.append((item.login, item.password))
+    return array
+
+
 app = Flask(__name__)
 app.secret_key = 'aosjndajndjansdojnasd.asdadas.d.d.1'
 
@@ -66,7 +75,6 @@ def login():
             flash('Invalid password.')
             return render_template('login.html', form=form)
 
-
         # next = request.args.get('next')
         # is_safe_url should check if the url is safe for redirects.
         # See http://flask.pocoo.org/snippets/62/ for an example.
@@ -80,11 +88,11 @@ def login():
 
 
 @app.route('/admin', methods=["GET", "POST"])
-@login_required
+
 def homepage():
     if current_user.role != 'admin':
         abort(404)
-    LISTA = applicant_methods.get_list()
+    LISTA = user_list()
     list_length = int(len(LISTA))
     if request.method == "GET":
         return render_template("index.html", LISTA=LISTA, list_length=list_length, class_list=class_list)
@@ -104,12 +112,43 @@ def user_page():
     return render_template("user.html", user=current_user)
 
 
+@app.route('/register', methods=["GET", "POST"])
+def register():
+    if current_user.is_authenticated:
+        if current_user.role != 'admin':
+            return redirect(url_for("user_page"))
+        else:
+            return redirect(url_for("homepage"))
+
+    form = forms.RegisterForm()
+    if form.validate_on_submit():
+        flash("You have successfully registered", "success")
+        user = User.create(
+            login=form.login.data,
+            # email=form.email.data,
+            password=form.password.data,
+            role='applicant')
+        Applicant.create(first_name=form.first_name.data, last_name=form.last_name.data, email=form.email.data,
+                         city=form.city.data, user_id=user.id)
+        return redirect(url_for("login"))
+    return render_template("register.html", form=form)
+
+
 @app.route('/mentors', methods=["GET", "POST"])
+@login_required
 def mentors():
     LISTA = mentor_methods.get_list()
     list_length = int(len(LISTA))
     if request.method == "GET":
         return render_template("mentors.html", LISTA=LISTA, list_length=list_length, class_list=class_list)
+
+
+@app.route('/users', methods=["GET", "POST"])
+def users():
+    LISTA = user_list()
+    list_length = int(len(LISTA))
+    if request.method == "GET":
+        return render_template("users.html", LISTA=LISTA, list_length=list_length, class_list=class_list)
 
 
 if __name__ == "__main__":

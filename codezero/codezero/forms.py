@@ -4,24 +4,24 @@ from wtforms.validators import (DataRequired, Regexp, ValidationError, Email,
 								Length, EqualTo)
 
 try:
-    from models import User
+    from models import User, Applicant
 except Exception:
-    from .models import User
+    from .models import User, Applicant
 
 
 # from models import User
 
 
-def name_exists(form, field):
-	if User.select().where(User.username == field.data).exists():
+def username_exists(form, field):
+    if User.select().where(User.login == field.data).exists():
 		raise ValidationError("User already exists")
 
 def email_exists(form, field):
-	if User.select().where(User.email == field.data).exists():
+    if Applicant.select().where(Applicant.email == field.data).exists():
 		raise ValidationError("Email already exists")
 
 class RegisterForm(Form):
-	username = StringField(
+    login = StringField(
 		"Username",
 		validators=[
 			DataRequired(),
@@ -29,8 +29,27 @@ class RegisterForm(Form):
 				message=("Username should be one word, letters, "
 						"numbers, and underscores only.")
 			),
-			name_exists
+            username_exists
 		])
+
+    first_name = StringField(
+        "First Name",
+        validators=[
+            DataRequired(),
+            Regexp(r'^[a-zA-Z0-9_]+$',
+                   message=("Username should be one word, letters, "
+                            "numbers, and underscores only.")
+                   )
+        ])
+    last_name = StringField(
+        "Last name",
+        validators=[
+            DataRequired(),
+            Regexp(r'^[a-zA-Z0-9_]+$',
+                   message=("Username should be one word, letters, "
+                            "numbers, and underscores only.")
+                   )
+        ])
 	email = StringField(
 		"Email",
 		validators=[
@@ -38,6 +57,18 @@ class RegisterForm(Form):
 			Email(),
 			email_exists
 			])
+
+    city = StringField(
+        "City",
+        validators=[
+            DataRequired(),
+            Regexp(r'^[a-zA-Z0-9_]+$',
+                   message=("Username should be one word, letters, "
+                            "numbers, and underscores only.")
+                   )
+        ])
+
+
 	password = PasswordField(
 		"Password",
 		validators=[

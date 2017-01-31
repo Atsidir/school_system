@@ -41,12 +41,10 @@ def get_applicants_without_id():
 
 def assign_id():
     applicant_id = get_applicants_without_id()
-    # print(len(applicant_id))
     for i in range(len(applicant_id)):
         new_id = generate_random()
         query = Applicant.update(applicant_id=new_id).where(Applicant.id == applicant_id[i])
         query.execute()
-    print("done")
 
 
 def assign_school():
