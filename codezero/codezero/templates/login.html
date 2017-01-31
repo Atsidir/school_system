@@ -27,15 +27,17 @@
     </head>
     <body>
     <div class="header_section">
-    <div class="nav_container w-container"></div>
-    <div class="logo_container w-container">
-      <div class="header_logo"><img class="logo" src="{{ url_for('static', filename='images/codeZeroLogo-copy.png') }}" width="50">
-      </div>
-      <div class="logo_text">code zero's school system</div>
+        <div class="nav_container w-container"></div>
+        <div class="logo_container w-container">
+            <div class="header_logo"><img class="logo"
+                                          src="{{ url_for('static', filename='images/codeZeroLogo-copy.png') }}"
+                                          width="50">
+            </div>
+            <div class="logo_text">code zero's school system</div>
+        </div>
     </div>
-    </div>
-  </div>
-        {% with messages = get_flashed_messages() %}
+
+    {% with messages = get_flashed_messages() %}
           {% if messages %}
             <ul class=flashes>
             {% for message in messages %}

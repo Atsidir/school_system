@@ -1,10 +1,14 @@
-from flask import Flask, render_template, request, url_for, redirect, flash
+from flask import Flask, render_template, request, url_for, redirect, flash, abort
 from peewee import *
 import applicant_methods
 import mentor_methods
 import forms
 from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user, current_user
 
+try:
+    from forms import *
+except Exception:
+    from .forms import *
 try:
     from models import *
 except Exception:
@@ -40,7 +44,7 @@ def load_user(user_id):
         return None
 
 
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST'])
 def login():
     # Here we use a class of some kind to represent and validate our
     # client-side form data. For example, WTForms is a library that will
@@ -52,11 +56,15 @@ def login():
 
         try:
             user = User.get(form.username.data == User.login)
+
         except DoesNotExist:
             flash('Invalid username or password.')
             return render_template('login.html', form=form)
-
-        login_user(user)
+        if user.password == form.password.data:
+            login_user(user)
+        else:
+            flash('Invalid password.')
+            return render_template('login.html', form=form)
 
 
         # next = request.args.get('next')
@@ -64,12 +72,18 @@ def login():
         # See http://flask.pocoo.org/snippets/62/ for an example.
         # if not is_safe_url(next):
         #    return Flask.abort(400)
-        return redirect(url_for('user_page'))
+        if current_user.role == 'admin':
+            return redirect(url_for('homepage'))
+        else:
+            return redirect(url_for('user_page'))
     return render_template('login.html', form=form)
 
 
-@app.route('/', methods=["GET", "POST"])
+@app.route('/admin', methods=["GET", "POST"])
+@login_required
 def homepage():
+    if current_user.role != 'admin':
+        abort(404)
     LISTA = applicant_methods.get_list()
     list_length = int(len(LISTA))
     if request.method == "GET":

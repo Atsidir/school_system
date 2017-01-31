@@ -3,7 +3,13 @@ from wtforms import StringField, PasswordField
 from wtforms.validators import (DataRequired, Regexp, ValidationError, Email,
 								Length, EqualTo)
 
-from models import User
+try:
+    from models import User
+except Exception:
+    from .models import User
+
+
+# from models import User
 
 
 def name_exists(form, field):
