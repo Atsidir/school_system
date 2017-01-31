@@ -109,7 +109,7 @@ def get_list():
     table = Applicant.select()
     lista = [("APPLICANT ID", "NAME", "CITY", "STATUS")]
     for item in table:
-        lista.append((item.applicant_id, item.first_name, item.last_name, item.email, item.city, item.status, item.school.name))
+        lista.append((item.applicant_id, item.first_name, item.last_name, item.email, item.city, item.status))
     return lista
 
 

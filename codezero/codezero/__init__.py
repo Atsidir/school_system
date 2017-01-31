@@ -27,9 +27,13 @@ except Exception:
 
 def user_list():
     array = []
-    array.append(('Username', 'Password'))
+    array.append(('Username', 'Password','Applicant name'))
     for item in User.select():
-        array.append((item.login, item.password))
+        if len(item.applicant) != 0:
+            array.append((item.login, item.password,item.applicant[0].first_name))
+        else:
+            array.append((item.login, item.password))
+
     return array
 
 
@@ -38,7 +42,6 @@ app.secret_key = 'aosjndajndjansdojnasd.asdadas.d.d.1'
 
 class_list = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"]
 
-print()
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -49,7 +52,7 @@ login_manager.login_view = "login"
 def load_user(user_id):
     try:
         return User.get(User.id == user_id)
-    except models.DoesNotExist:
+    except DoesNotExist:
         return None
 
 
@@ -88,11 +91,11 @@ def login():
 
 
 @app.route('/admin', methods=["GET", "POST"])
-
+@login_required
 def homepage():
     if current_user.role != 'admin':
         abort(404)
-    LISTA = user_list()
+    LISTA = applicant_methods.get_list()
     list_length = int(len(LISTA))
     if request.method == "GET":
         return render_template("index.html", LISTA=LISTA, list_length=list_length, class_list=class_list)
@@ -125,11 +128,10 @@ def register():
         flash("You have successfully registered", "success")
         user = User.create(
             login=form.login.data,
-            # email=form.email.data,
             password=form.password.data,
             role='applicant')
         Applicant.create(first_name=form.first_name.data, last_name=form.last_name.data, email=form.email.data,
-                         city=form.city.data, user_id=user.id)
+                         city=form.city.data, user=user.id)
         return redirect(url_for("login"))
     return render_template("register.html", form=form)
 
