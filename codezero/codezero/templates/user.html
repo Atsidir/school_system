@@ -44,8 +44,104 @@
     </div>
 </div>
 
-Username: {{ user.login }}
-<br>
-Passw:{{ user.password }}
+<div class="body_section">
+    <div class="w-container">
+        <div class="profile_box">
+            <img src="https://placekitten.com/103/102" style="align-self: flex-start;">
+            <div class="profile_data">
+                <p>Username: {{ user.login }}</p>
+                <p>Passw: {{ user.password }}</p>
+                <p>Name: {{ user.applicant[0].first_name }} {{ user.applicant[0].last_name }}</p>
+                <p>School: {{ user.applicant[0].school.name }}</p>
+                <p>Status: <span class="status"> {{ user.applicant[0].status }}</span></p>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
+
+
+
+<!-- NOT IN USE
+
+<table class="tablee tablesorter" id="myTable">
+          <thead>
+          <tr>
+              <th>Applicant name <i class="fa fa-angle-down" aria-hidden="true"></i></th>
+              <th>App Code</th>
+            <th>School <i class="fa fa-angle-down" aria-hidden="true"></i></th>
+            <th>Status <i class="fa fa-angle-down" aria-hidden="true"></i></th>
+              <th>City <i class="fa fa-angle-down" aria-hidden="true"></i></th>
+          </tr>
+          </thead>
+          <tbody> 
+              <tr class="one normal" id="">
+            <td>
+              <div class="bck">
+                <i class="fa fa-user fa-2x fa-border" aria-hidden="true"></i>
+              </div>
+              <div class="bck">
+                  <p class="person">{{ user.applicant[0].first_name }} {{ user.applicant[0].last_name }}</p>
+                  <p class="email">{{ user.applicant[0].email }}</p>
+              </div>
+            </td>
+                  <td>{{ user.login }}</td>
+                  <td>{{ user.login }}</td>
+                  {% if user.applicant[0].status == "applied" %}
+                      <td>
+                          <button class="status">{{ user.applicant[0].status }}</button>
+                      </td>
+                  {% elif user.applicant[0].status == "approved" %}
+                      <td>
+                          <button class="status approved">{{ user.applicant[0].status }}</button>
+                      </td>
+                  {% elif user.applicant[0].status == "rejected" %}
+                      <td>
+                          <button class="status rejected">{{ user.applicant[0].status }}</button>
+                      </td>
+                  {% endif %}
+                  <td>{{ user.login }}</td>
+            <td class="last_td">
+                <img src="./static/images/ellipsis.svg" class="dot_dot_dot" id="">
+            </td>
+          </tr>
+
+              <tr class="hidden" id="">
+            <td width="100%" colspan="6">
+              <div class="statistics">
+                <div class="stats">
+                  <div class="sm_card">
+                    <h2>78/100</h2>
+                    <p>English</p>
+                  </div>
+                  <div class="sm_card">
+                    <h2>84/100</h2>
+                    <p>Logic</p>
+                  </div>
+                  <button class="btn">Update</button>
+                  
+                </div>
+                <div class="stats_last">
+                    <img src="./static/images/rubbish-bin.svg" class="rubbish_bin" id="">
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tbody> 
+        </table>
+-->
+
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+

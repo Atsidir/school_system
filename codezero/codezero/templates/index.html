@@ -29,7 +29,17 @@
 </head>
 <body>
   <div class="header_section">
-    <div class="nav_container w-container"></div>
+    <div class="nav_container w-container">
+      {% if current_user.is_authenticated %}
+        <div class=""><a class="options_button nav_btn" href="{{ url_for('logout') }}">LOGOUT</a>
+        </div>
+        <div class=""><a class="options_button nav_btn" href="{{ url_for('user_page') }}">USER</a>
+        </div>
+        {% else %}
+        <div class=""><a class="options_button nav_btn" href="{{ url_for('login') }}">LOGIN</a>
+        </div>
+        {% endif %}
+    </div>
     <div class="logo_container w-container">
       <div class="header_logo"><img class="logo" src="{{ url_for('static', filename='images/codeZeroLogo-copy.png') }}" width="50">
       </div>
@@ -53,15 +63,6 @@
           <div class="options_counter"><span>23</span>
           </div>
         </div>
-        {% if current_user.is_authenticated %}
-        <div class="options_element"><a class="options_button" href="{{ url_for('logout') }}">LOGOUT</a>
-        </div>
-        <div class="options_element"><a class="options_button" href="{{ url_for('user_page') }}">USER</a>
-        </div>
-        {% else %}
-        <div class="options_element"><a class="options_button" href="{{ url_for('login') }}">LOGIN</a>
-        </div>
-        {% endif %}
       </div>
       <div class="plus_div w-clearfix">
         <img id="sign" class="plus_sign" src="{{ url_for('static', filename='images/plus.svg') }}" width="50">
