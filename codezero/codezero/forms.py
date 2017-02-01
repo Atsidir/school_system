@@ -4,9 +4,9 @@ from wtforms.validators import (DataRequired, Regexp, ValidationError, Email,
                                 Length, EqualTo)
 
 try:
-    from models import User, Applicant
+    from models import User, Applicant, City
 except Exception:
-    from .models import User, Applicant
+    from .models import User, Applicant, City
 
 
 # from models import User
@@ -20,6 +20,11 @@ def username_exists(form, field):
 def email_exists(form, field):
     if Applicant.select().where(Applicant.email == field.data).exists():
         raise ValidationError("Email already exists")
+
+
+def city_exist(form, field):
+    if City.select().where(City.city_name == field.data).exists() == False:
+        raise ValidationError("There is no such city")
 
 
 class RegisterForm(Form):
@@ -60,7 +65,6 @@ class RegisterForm(Form):
             email_exists
         ])
 
-
     city = StringField(
         "City",
         validators=[
@@ -68,7 +72,8 @@ class RegisterForm(Form):
             Regexp(r'^[a-zA-Z0-9_]+$',
                    message=("Username should be one word, letters, "
                             "numbers, and underscores only.")
-                   )
+                   ),
+            city_exist
         ])
 
     password = PasswordField(

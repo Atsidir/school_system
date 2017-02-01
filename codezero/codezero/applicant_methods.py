@@ -38,6 +38,11 @@ def get_applicants_without_id():
 
 # MAIN FUNCTION ##### checks, generates and assignes new applicant_ids
 
+def assign_id_to_applicant(applicant):
+    new_id = generate_random()
+    query = Applicant.update(applicant_id=new_id).where(Applicant.id == applicant.id)
+    query.execute()
+
 
 def assign_id():
     applicant_id = get_applicants_without_id()
@@ -48,8 +53,8 @@ def assign_id():
 
 
 def assign_school():
-    query = Applicant.\
-        select(Applicant.id.alias('applicant_id'), School.id.alias('school_id')).\
+    query = Applicant. \
+        select(Applicant.id.alias('applicant_id'), School.id.alias('school_id')). \
         join(City, on=City.city_name == Applicant.city).join(School).naive()
     for item in query:
         # print(item.applicant_id,item.school_id)
@@ -57,9 +62,15 @@ def assign_school():
             (Applicant.id == item.applicant_id) & (Applicant.school.is_null(True))).execute()
 
 
+def assign_school_to_applicant(applicant):
+    city = City.get(City.city_name == applicant.city)
+    Applicant.update(school=city.location).where(
+        (Applicant.id == applicant.id) & (Applicant.school.is_null(True))).execute()
+
+
 def display_all_data():
     applicants = Applicant.select(Applicant.applicant_id, Applicant.name, Applicant.city,
-                                  Applicant.status, Applicant.school, School.name.alias("school_name")).\
+                                  Applicant.status, Applicant.school, School.name.alias("school_name")). \
         join(School).naive()
 
     for person in applicants:
@@ -69,7 +80,7 @@ def display_all_data():
 
 def filter_by_status(string):
     applicants = Applicant.select(Applicant.applicant_id, Applicant.name, Applicant.city,
-                                  Applicant.status, Applicant.school, School.name.alias("school_name")).\
+                                  Applicant.status, Applicant.school, School.name.alias("school_name")). \
         join(School).where(Applicant.status == string).naive()
 
     for person in applicants:
@@ -79,7 +90,7 @@ def filter_by_status(string):
 
 def filter_by_location(string):
     applicants = Applicant.select(Applicant.applicant_id, Applicant.name, Applicant.city,
-                                  Applicant.status, Applicant.school, School.name.alias("school_name")).\
+                                  Applicant.status, Applicant.school, School.name.alias("school_name")). \
         join(School).where(Applicant.city == string).naive()
 
     for person in applicants:
@@ -89,7 +100,7 @@ def filter_by_location(string):
 
 def filter_by_school(string):
     applicants = Applicant.select(Applicant.applicant_id, Applicant.name, Applicant.city,
-                                  Applicant.status, Applicant.school, School.name.alias("school_name")).\
+                                  Applicant.status, Applicant.school, School.name.alias("school_name")). \
         join(School).where(School.name == string).naive()
 
     for person in applicants:
@@ -105,22 +116,9 @@ def filter_by_school(string):
 # filter_by_school("Budapest")
 
 def get_list():
-    assign_id()
     table = Applicant.select()
     lista = [("APPLICANT ID", "NAME", "CITY", "STATUS")]
     for item in table:
-        lista.append((item.applicant_id, item.first_name, item.last_name, item.email, item.city, item.status))
+        lista.append(
+            (item.applicant_id, item.first_name, item.last_name, item.email, item.city, item.status, item.school.name))
     return lista
-
-
-
-
-
-
-
-
-
-
-
-
-

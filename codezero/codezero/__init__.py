@@ -27,21 +27,30 @@ except Exception:
 
 def user_list():
     array = []
-    array.append(('Username', 'Password','Applicant name'))
+    array.append(('Username', 'Password', 'Applicant name'))
     for item in User.select():
         if len(item.applicant) != 0:
-            array.append((item.login, item.password,item.applicant[0].first_name))
+            array.append((item.login, item.password, item.applicant[0].first_name))
         else:
             array.append((item.login, item.password))
 
     return array
 
 
+def create_user(form):
+    user = User.create(login=form.login.data, password=form.password.data, role='applicant')
+    applicant = Applicant.create(first_name=form.first_name.data, last_name=form.last_name.data, email=form.email.data,
+                                 city=form.city.data, user=user.id)
+
+    applicant_methods.assign_id_to_applicant(applicant)
+    assign_school_to_applicant(applicant)
+
+
+
 app = Flask(__name__)
 app.secret_key = 'aosjndajndjansdojnasd.asdadas.d.d.1'
 
 class_list = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"]
-
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -68,7 +77,6 @@ def login():
 
         try:
             user = User.get(form.username.data == User.login)
-
         except DoesNotExist:
             flash('Invalid username or password.')
             return render_template('login.html', form=form)
@@ -122,16 +130,10 @@ def register():
             return redirect(url_for("user_page"))
         else:
             return redirect(url_for("homepage"))
-
     form = forms.RegisterForm()
     if form.validate_on_submit():
         flash("You have successfully registered", "success")
-        user = User.create(
-            login=form.login.data,
-            password=form.password.data,
-            role='applicant')
-        Applicant.create(first_name=form.first_name.data, last_name=form.last_name.data, email=form.email.data,
-                         city=form.city.data, user=user.id)
+        create_user(form)
         return redirect(url_for("login"))
     return render_template("register.html", form=form)
 
