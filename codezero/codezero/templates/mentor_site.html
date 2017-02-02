@@ -1,0 +1,133 @@
+<html data-wf-page="58863baff3f0d8bb79ea26d6" data-wf-site="58863baff3f0d8bb79ea26d5"
+      xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="utf-8">
+    <title>codecool school system</title>
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <meta content="Webflow" name="generator">
+    <link href="{{ url_for('static', filename='css/normalize.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ url_for('static', filename='css/webflow.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ url_for('static', filename='css/codecool-school-system.webflow.css') }}" rel="stylesheet"
+          type="text/css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/font-awesome/css/font-awesome.min.css') }}">
+    <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js"></script>
+    <script type="text/javascript">
+        WebFont.load({
+            google: {
+                families: ["Exo:100,100italic,200,200italic,300,300italic,400,400italic,500,500italic,600,600italic,700,700italic,800,800italic,900,900italic"]
+            }
+        });
+    </script>
+    <script src=" {{ url_for('static', filename='js/modernizr.js') }} " type="text/javascript"></script>
+    <script src=" {{ url_for('static', filename='jquery-3.1.1.min.js') }} " type="text/javascript"></script>
+    <script src=" {{ url_for('static', filename='js/webflow.js') }} " type="text/javascript"></script>
+    <script src=" {{ url_for('static', filename='jquery-latest.js') }} " type="text/javascript"></script>
+    <script src=" {{ url_for('static', filename='jquery.tablesorter.js') }} " type="text/javascript"></script>
+    <link href="https://daks2k3a4ib2z.cloudfront.net/img/favicon.ico" rel="shortcut icon" type="image/x-icon">
+    <link href="https://daks2k3a4ib2z.cloudfront.net/img/webclip.png" rel="apple-touch-icon">
+</head>
+<body>
+<div class="header_section">
+    <div class="nav_container w-container"></div>
+    <div class="logo_container w-container">
+        <div class="header_logo"><img class="logo"
+                                      src="{{ url_for('static', filename='images/codeZeroLogo-copy.png') }}" width="50">
+        </div>
+        <div class="logo_text">code zero's school system</div>
+    </div>
+    <div class="options_container w-container">
+
+        <div align="right" style="vertical-align: top;" class="options_div">
+            <div class="options_element"><a class="options_button" href="{{ url_for('logout') }}">LOGOUT</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="body_container w-container">
+    <div class="w-container">
+        <div style="width: 500px; background-color: #303550; color: #fff; margin-top: 20px; margin-bottom: -20px; padding: 10px; border-radius:3px 3px 0px 0px; text-align: center;">Your Profile</div>
+        <div class="profile_box" style="max-width: 500px; border: 1px solid #303550; box-shadow: none;">
+            <img src="https://placekitten.com/103/102" style="align-self: flex-start;">
+            <div class="profile_data">
+                <p>First name: {{ mentor.first_name }}</p>
+                <p>Last name: {{ mentor.last_name }}</p>
+                <p>Email: {{ mentor.email }}</p>
+                <p>School: {{ mentor.school.name }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="w-embed">
+        <div style="width: 500px; margin-top: 30px; display: flex; flex-direction: column; justify-content: center; align-items: center; border: 1px solid #303550; border-radius: 3px 3px 0px 0px; padding-bottom: 10px;">
+            <div style="display: flex; width: 100%; justify-content: center; align-items: center; background-color: #303550; padding: 10px 0px; color: #fff;">Interview Slots</div>
+            <table class="" id="" style="">
+                <thead>
+                <tr>
+                    <th>Interview start</th>
+                    <th>Interview end</th>
+                    <th>Reserved</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                {% for interviewslot in interviewlots %}
+                    <tr style="border-bottom: 1px solid #303550; box-shadow: none;">
+                        <td style="width: 200px;">{{ interviewslot.start }}</td>
+                        <td style="width: 200px;">{{ interviewslot.end }}</td>
+                        {% if interviewslot.reserved == True %}
+                        <td style="color: red;">{{ interviewslot.reserved }}</td>
+                        {% else %}
+                        <td style="color: green;">{{ interviewslot.reserved }}</td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+                    <tr style="box-shadow: none;">
+                        <td colspan="3" style="padding: 0px;">
+                            {% from 'macros.html' import render_field %}
+                            <form class="int_slot_form" method="POST" action="" style="display: flex; margin-bottom: 10px; padding-left: 10px;">
+                                {{ form.hidden_tag() }}
+                                {% for field in form %}
+                                    {{ render_field(field) }}
+                                {% endfor %}
+                                <div class="login_reg">
+                                    <button type="submit" id="submit" class="login">Add</button>
+                                </div>
+                            </form>
+                        </td>
+                    </tr>
+
+
+                </tbody>
+            </table>
+        </div>
+        <div class="">
+            <br>
+            <table class="tablee tablesorter" id="myTable">
+                <caption>Scheduled Interviews</caption>
+
+                <thead>
+                <tr>
+                    <th>Applicant name</th>
+                    <th>Applicant code</th>
+                    <th>Applicant email</th>
+                    <th>Interview start</th>
+                    <th>Interview end</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                {% for interview in interviews %}
+                    <tr "visibility: visible">
+                    <td><p>{{ interview.applicant.first_name }} {{ interview.applicant.last_name }}</p></td>
+                    <td>{{ interview.applicant.applicant_id }}</td>
+                    <td>{{ interview.applicant.email }}</td>
+                    <td>{{ interview.slot.start }}</td>
+                    <td>{{ interview.slot.end }}</td>
+                    </tr>
+                {% endfor %}
+                <tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

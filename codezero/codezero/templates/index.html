@@ -29,7 +29,17 @@
 </head>
 <body>
   <div class="header_section">
-    <div class="nav_container w-container"></div>
+    <div class="nav_container w-container">
+      {% if current_user.is_authenticated %}
+        <div class=""><a class="options_button nav_btn" href="{{ url_for('logout') }}">LOGOUT</a>
+        </div>
+        <div class=""><a class="options_button nav_btn" href="{{ url_for('user_page') }}">USER</a>
+        </div>
+        {% else %}
+        <div class=""><a class="options_button nav_btn" href="{{ url_for('login') }}">LOGIN</a>
+        </div>
+        {% endif %}
+    </div>
     <div class="logo_container w-container">
       <div class="header_logo"><img class="logo" src="{{ url_for('static', filename='images/codeZeroLogo-copy.png') }}" width="50">
       </div>
@@ -45,19 +55,13 @@
           <div class="options_counter"><span>6</span>
           </div>
         </div>
-        <div class="options_element"><a class="options_button" href="#">Admins</a>
+          <div class="options_element"><a class="options_button" href=" {{ url_for('users') }}">Users</a>
           <div class="options_counter"><span>4</span>
           </div>
         </div>
         <div class="options_element"><a class="options_button" href="#">INterviews</a>
           <div class="options_counter"><span>23</span>
           </div>
-        </div>
-        <div class="options_element"><a class="options_button" href="{{ url_for('login') }}">LOGIN</a>
-        </div>
-        <div class="options_element"><a class="options_button" href="{{ url_for('logout') }}">LOGOUT</a>
-        </div>
-        <div class="options_element"><a class="options_button" href="{{ url_for('user_page') }}">USER</a>
         </div>
       </div>
       <div class="plus_div w-clearfix">
@@ -101,43 +105,48 @@
         <table class="tablee tablesorter" id="myTable">
           <thead>
           <tr>
-            <th>Applicants <i class="fa fa-angle-down" aria-hidden="true"></i></th>
+              <th>Applicant name <i class="fa fa-angle-down" aria-hidden="true"></i></th>
+              <th>App Code</th>
             <th>School <i class="fa fa-angle-down" aria-hidden="true"></i></th>
             <th>Status <i class="fa fa-angle-down" aria-hidden="true"></i></th>
-            <th>Location <i class="fa fa-angle-down" aria-hidden="true"></i></th>
-            <th>Appl.Code </th>
-            
+              <th>City <i class="fa fa-angle-down" aria-hidden="true"></i></th>
           </tr>
           </thead>
           <tbody> 
           {% set x = 0 %}
-          {% for i in LISTA[1:] %}
-          <tr class="{{ class_list[x] }} normal" id="d{{ i[0] }}">
+          {% for applicant in LISTA[1:] %}
+              <tr class="{{ class_list[x] }} normal" id="d{{ applicant[0] }}">
             <td>
-      			  <div class="bck">
-      			  	<i class="fa fa-user fa-2x fa-border" aria-hidden="true"></i>
-      			  </div>
-      			  <div class="bck">
-      			  	<p class="person">{{ i[1] }}</p>
-      			  	<p class="email">{{ i[1].lower() }}@email.com</p>
-      			  </div>
+              <div class="bck">
+                <i class="fa fa-user fa-2x fa-border" aria-hidden="true"></i>
+              </div>
+              <div class="bck">
+                  <p class="person">{{ applicant[1] }} {{ applicant[2] }}</p>
+                  <p class="email">{{ applicant[3] }}</p>
+              </div>
             </td>
-            <td>{{ i[2] }}</td>
-            {% if i[3] == "new" %}
-            <td><button class="status">{{ i[3] }}</button></td>
-            {% elif i[3] == "approved" %}
-            <td><button class="status approved">{{ i[3] }}</button></td>
-            {% elif i[3] == "rejected" %}
-            <td><button class="status rejected">{{ i[3] }}</button></td>
+                  <td>{{ applicant[0] }}</td>
+                  <td>{{ applicant[6] }}</td>
+                  {% if applicant[5] == "applied" %}
+                      <td>
+                          <button class="status">{{ applicant[5] }}</button>
+                      </td>
+                  {% elif applicant[5] == "approved" %}
+                      <td>
+                          <button class="status approved">{{ applicant[5] }}</button>
+                      </td>
+                  {% elif applicant[5] == "rejected" %}
+                      <td>
+                          <button class="status rejected">{{ applicant[5] }}</button>
+                      </td>
             {% endif %}
-            <td>{{ i[2] }}</td>
-            <td>{{ i[0] }}</td>
+                  <td>{{ applicant[4] }}</td>
             <td class="last_td">
-              <img src="./static/images/ellipsis.svg" class="dot_dot_dot" id="{{ i[0] }}">
+                <img src="./static/images/ellipsis.svg" class="dot_dot_dot" id="{{ applicant[0] }}">
             </td>
           </tr>
 
-          <tr class="hidden" id="s{{ i[0] }}">
+              <tr class="hidden" id="s{{ applicant[0] }}">
             <td width="100%" colspan="6">
               <div class="statistics">
                 <div class="stats">
@@ -153,7 +162,7 @@
                   
                 </div>
                 <div class="stats_last">
-                  <img src="./static/images/rubbish-bin.svg" class="rubbish_bin" id="{{ i[0] }}">
+                    <img src="./static/images/rubbish-bin.svg" class="rubbish_bin" id="{{ applicant[0] }}">
                 </div>
               </div>
             </td>
@@ -186,5 +195,4 @@
   </script>
   <!-- [if lte IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/placeholders/3.0.2/placeholders.min.js"></script><![endif] -->
 </body>
-hekllo
 </html>
