@@ -8,6 +8,7 @@ except Exception:
 
 
 class Applicant_methods:
+
     @staticmethod
     def generate_random():
         existing_ids = Applicant_methods.get_all_applicant_id()
@@ -47,7 +48,8 @@ class Applicant_methods:
     @classmethod
     def assign_school_to_applicant(cls, applicant):
         city = City.get(City.city_name == applicant.city)
-        applicant.school = applicant.save()
+        applicant.school = city.location
+        applicant.save()
 
     @classmethod
     def get_list(cls):
