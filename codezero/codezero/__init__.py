@@ -183,6 +183,11 @@ def users():
     if request.method == "GET":
         return render_template("users.html", LISTA=LISTA, list_length=list_length, class_list=class_list)
 
+@app.route('/try', methods=["GET", "POST"])
+def tryy():
+    if request.method == "GET":
+        return render_template("try.html")
+
 
 if __name__ == "__main__":
     app.run(debug=True)
