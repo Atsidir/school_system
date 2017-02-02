@@ -46,7 +46,6 @@ def create_user(form):
     assign_school_to_applicant(applicant)
 
 
-
 app = Flask(__name__)
 app.secret_key = 'aosjndajndjansdojnasd.asdadas.d.d.1'
 
@@ -93,6 +92,10 @@ def login():
         #    return Flask.abort(400)
         if current_user.role == 'admin':
             return redirect(url_for('homepage'))
+        elif current_user.role == 'applicant':
+            return redirect(url_for('user_page'))
+        elif current_user.role == 'mentor':
+            return redirect(url_for('mentor_page'))
         else:
             return redirect(url_for('user_page'))
     return render_template('login.html', form=form)
@@ -136,6 +139,24 @@ def register():
         create_user(form)
         return redirect(url_for("login"))
     return render_template("register.html", form=form)
+
+
+@app.route('/mentor', methods=["GET", "POST"])
+@login_required
+def mentor_page():
+    if current_user.is_authenticated:
+        if current_user.role != 'mentor':
+            abort(404)
+    else:
+        abort(404)
+    mentor = Mentor.get(user_id=current_user.id)
+    interviewlots = InterviewSlot.select().where(InterviewSlot.assigned_mentor == mentor.id)
+    interviews = Interview.select().join(InterviewSlot).where(InterviewSlot.assigned_mentor == mentor.id)
+    form = forms.AddInterviewSlot()
+    if form.validate_on_submit():
+        InterviewSlot.create(start=form.start.data, end=form.end.data, reserved=False, assigned_mentor=mentor.id)
+        return redirect(url_for("mentor_page"))
+    return render_template("mentor_site.html", interviewlots=interviewlots, interviews=interviews, form=form)
 
 
 @app.route('/mentors', methods=["GET", "POST"])

@@ -27,6 +27,14 @@ def city_exist(form, field):
         raise ValidationError("There is no such city")
 
 
+class AddInterviewSlot(Form):
+    start = StringField(
+        "Starting Date"
+    )
+    end = StringField(
+        "End Date"
+    )
+
 class RegisterForm(Form):
     login = StringField(
         "Username",
