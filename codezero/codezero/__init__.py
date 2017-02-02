@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, url_for, redirect, flash, abo
 from peewee import *
 import applicant_methods
 import mentor_methods
+import interview_methods
 import forms
 from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user, current_user
 
@@ -13,6 +14,10 @@ try:
     from models import *
 except Exception:
     from .models import *
+try:
+    from interview_methods import *
+except Exception:
+    from .interview_methods import *
 
 try:
     from applicant_methods import *
@@ -40,10 +45,12 @@ def user_list():
 def create_user(form):
     user = User.create(login=form.login.data, password=form.password.data, role='applicant')
     applicant = Applicant.create(first_name=form.first_name.data, last_name=form.last_name.data, email=form.email.data,
-                                 city=form.city.data, user=user.id)
+                                 city=str(form.city.data).lower(), user=user.id)
 
-    applicant_methods.assign_id_to_applicant(applicant)
-    assign_school_to_applicant(applicant)
+    Applicant_methods.assign_id_to_applicant(applicant)
+    Applicant_methods.assign_school_to_applicant(applicant)
+    interview_methods.assign_interview(applicant)
+
 
 
 app = Flask(__name__)
@@ -106,7 +113,7 @@ def login():
 def homepage():
     if current_user.role != 'admin':
         abort(404)
-    LISTA = applicant_methods.get_list()
+    LISTA = Applicant_methods.get_list()
     list_length = int(len(LISTA))
     if request.method == "GET":
         return render_template("index.html", LISTA=LISTA, list_length=list_length, class_list=class_list)

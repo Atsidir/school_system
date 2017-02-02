@@ -23,7 +23,7 @@ def email_exists(form, field):
 
 
 def city_exist(form, field):
-    if City.select().where(City.city_name == field.data).exists() == False:
+    if City.select().where(City.city_name == str(field.data).lower()).exists() == False:
         raise ValidationError("There is no such city")
 
 

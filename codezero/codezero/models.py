@@ -2,6 +2,7 @@ from peewee import *
 from flask_login import UserMixin
 import datetime
 
+
 # Configure your database connection here
 # database name = should be your username on your laptop
 
