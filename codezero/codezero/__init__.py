@@ -159,11 +159,12 @@ def mentor_page():
     mentor = Mentor.get(user_id=current_user.id)
     interviewlots = InterviewSlot.select().where(InterviewSlot.assigned_mentor == mentor.id)
     interviews = Interview.select().join(InterviewSlot).where(InterviewSlot.assigned_mentor == mentor.id)
+    num_of_intvws = len(interviews)
     form = forms.AddInterviewSlot()
     if form.validate_on_submit():
         InterviewSlot.create(start=form.start.data, end=form.end.data, reserved=False, assigned_mentor=mentor.id)
         return redirect(url_for("mentor_page"))
-    return render_template("mentor_site.html", interviewlots=interviewlots, interviews=interviews, form=form, mentor = mentor)
+    return render_template("mentor_site.html", interviewlots=interviewlots, interviews=interviews, form=form, mentor = mentor, num_of_intvws=num_of_intvws)
 
 
 @app.route('/mentors', methods=["GET", "POST"])

@@ -45,41 +45,99 @@
 </div>
 <div class="body_container w-container">
     <div class="w-container">
-        <div style="width: 500px; background-color: #303550; color: #fff; margin-top: 20px; margin-bottom: -20px; padding: 10px; border-radius:3px 3px 0px 0px; text-align: center;">Your Profile</div>
-        <div class="profile_box" style="max-width: 500px; border: 1px solid #303550; box-shadow: none;">
+        <div style="width: 100%; background-color: #303550; color: #fff; margin-top: 20px; margin-bottom: 20px; padding: 10px 20px; border-radius:3px; text-align: left; box-shadow: 1px 1px 3px 1px #e3e3e3;">Hello <span style="color: #e91e63;">{{ mentor.first_name }} {{ mentor.last_name }}</span>, You have <span style="color: #e91e63;">{{ num_of_intvws }}</span> interviews at Codecool <span style="color: #e91e63;">{{ mentor.school.name }}</span><span style="margin-left: 10px;">See them below!</span></div>
+        <!--
+        <div class="profile_box" style="max-width: 100%;  box-shadow: 1px 1px 3px 1px #e3e3e3;">
             <img src="https://placekitten.com/103/102" style="align-self: flex-start;">
             <div class="profile_data">
-                <p>First name: {{ mentor.first_name }}</p>
-                <p>Last name: {{ mentor.last_name }}</p>
-                <p>Email: {{ mentor.email }}</p>
-                <p>School: {{ mentor.school.name }}</p>
+                <p>Hello {{ mentor.first_name }} {{ mentor.last_name }}, You have x interviews at Codecool {{ mentor.school.name }}</p>
             </div>
         </div>
+        -->
     </div>
     <div class="w-embed">
-        <div style="width: 500px; margin-top: 30px; display: flex; flex-direction: column; justify-content: center; align-items: center; border: 1px solid #303550; border-radius: 3px 3px 0px 0px; padding-bottom: 10px;">
-            <div style="display: flex; width: 100%; justify-content: center; align-items: center; background-color: #303550; padding: 10px 0px; color: #fff;">Interview Slots</div>
-            <table class="" id="" style="">
+        <table class="tablee tablesorter" id="myTable">
+          <thead>
+          <tr>
+              <th>Applicant name <i class="fa fa-angle-down" aria-hidden="true"></i></th>
+              <th>App Code</th>
+            <th>Interview Start <i class="fa fa-angle-down" aria-hidden="true"></i></th>
+            <th>Interview End <i class="fa fa-angle-down" aria-hidden="true"></i></th>
+              <th>Status <i class="fa fa-angle-down" aria-hidden="true"></i></th>
+          </tr>
+          </thead>
+          <tbody> 
+          {% for interview in interviews %}
+              <tr class="one normal" id="">
+            <td>
+              <div class="bck">
+                <i class="fa fa-user fa-2x fa-border" aria-hidden="true"></i>
+              </div>
+              <div class="bck">
+                  <p class="person">{{ interview.applicant.first_name }} {{ interview.applicant.last_name }}</p>
+                  <p class="email">{{ interview.applicant.email }}</p>
+              </div>
+            </td>
+                  <td class="email">{{ interview.applicant.applicant_id }}</td>
+                  <td class="email">{{ interview.slot.start }}</td>
+                  <td class="email">{{ interview.slot.end }}</td>
+                  <td class="email">{{ interview.applicant.status }}</td>
+            <td class="last_td">
+                <img src="./static/images/ellipsis.svg" class="dot_dot_dot" id="">
+            </td>
+          </tr>
+
+              <tr class="hidden" id="">
+            <td width="100%" colspan="6">
+              <div class="statistics">
+                <div class="stats">
+                  <div class="sm_card">
+                    <h2>78/100</h2>
+                    <p>English</p>
+                  </div>
+                  <div class="sm_card">
+                    <h2>84/100</h2>
+                    <p>Logic</p>
+                  </div>
+                  <button class="btn">Update</button>
+                  
+                </div>
+                <div class="stats_last">
+                    <img src="./static/images/rubbish-bin.svg" class="rubbish_bin" id="">
+                </div>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+          <tbody> 
+        </table>
+    </div>
+    <div class="w-embed">
+        <div style="width: 100%; margin-top: 30px; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; border-radius: 3px 3px 0px 0px; padding-bottom: 10px;">
+            <div style="display: flex; width: 100%; justify-content: flex-start; align-items: center; background-color: #303550; padding: 10px 20px; margin-bottom: 20px; color: #fff; border-radius: 3px; box-shadow: 1px 1px 3px 1px #e3e3e3;"><span style="">You can check your existing interview slots and add new ones here.</span> </div>
+        </div>
+        <div style="display: flex; justify-content: center; align-items: center; padding-left: 20px; padding-bottom: 20px; box-shadow: 1px 1px 3px 1px #e3e3e3; max-width: 550px; margin-bottom: 50px;">
+            <table class="" id="" style=" max-width: 600px;">
                 <thead>
-                <tr>
-                    <th>Interview start</th>
-                    <th>Interview end</th>
-                    <th>Reserved</th>
-                </tr>
+                    <tr style="">
+                        <th>Interview start</th>
+                        <th>Interview end</th>
+                        <th>Reserved</th>
+                    </tr>
                 </thead>
                 <tbody>
 
-                {% for interviewslot in interviewlots %}
-                    <tr style="border-bottom: 1px solid #303550; box-shadow: none;">
-                        <td style="width: 200px;">{{ interviewslot.start }}</td>
-                        <td style="width: 200px;">{{ interviewslot.end }}</td>
+                    {% for interviewslot in interviewlots %}
+                    <tr style="border-bottom: 1px solid #e3e3e3; box-shadow: none;">
+                        <td class="email" style="width: 200px;">{{ interviewslot.start }}</td>
+                        <td class="email" style="width: 200px;">{{ interviewslot.end }}</td>
                         {% if interviewslot.reserved == True %}
-                        <td style="color: red;">{{ interviewslot.reserved }}</td>
+                        <td class="email" style="color: red;">{{ interviewslot.reserved }}</td>
                         {% else %}
-                        <td style="color: green;">{{ interviewslot.reserved }}</td>
+                        <td class="email" style="color: green;">{{ interviewslot.reserved }}</td>
                         {% endif %}
                     </tr>
-                {% endfor %}
+                    {% endfor %}
                     <tr style="box-shadow: none;">
                         <td colspan="3" style="padding: 0px;">
                             {% from 'macros.html' import render_field %}
@@ -94,37 +152,7 @@
                             </form>
                         </td>
                     </tr>
-
-
                 </tbody>
-            </table>
-        </div>
-        <div class="">
-            <br>
-            <table class="tablee tablesorter" id="myTable">
-                <caption>Scheduled Interviews</caption>
-
-                <thead>
-                <tr>
-                    <th>Applicant name</th>
-                    <th>Applicant code</th>
-                    <th>Applicant email</th>
-                    <th>Interview start</th>
-                    <th>Interview end</th>
-                </tr>
-                </thead>
-                <tbody>
-
-                {% for interview in interviews %}
-                    <tr "visibility: visible">
-                    <td><p>{{ interview.applicant.first_name }} {{ interview.applicant.last_name }}</p></td>
-                    <td>{{ interview.applicant.applicant_id }}</td>
-                    <td>{{ interview.applicant.email }}</td>
-                    <td>{{ interview.slot.start }}</td>
-                    <td>{{ interview.slot.end }}</td>
-                    </tr>
-                {% endfor %}
-                <tbody>
             </table>
         </div>
     </div>
