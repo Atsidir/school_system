@@ -44,41 +44,62 @@
     </div>
 </div>
 <div class="body_container w-container">
+    <div class="w-container">
+        <div style="width: 500px; background-color: #303550; color: #fff; margin-top: 20px; margin-bottom: -20px; padding: 10px; border-radius:3px 3px 0px 0px; text-align: center;">Your Profile</div>
+        <div class="profile_box" style="max-width: 500px; border: 1px solid #303550; box-shadow: none;">
+            <img src="https://placekitten.com/103/102" style="align-self: flex-start;">
+            <div class="profile_data">
+                <p>First name: {{ mentor.first_name }}</p>
+                <p>Last name: {{ mentor.last_name }}</p>
+                <p>Email: {{ mentor.email }}</p>
+                <p>School: {{ mentor.school.name }}</p>
+            </div>
+        </div>
+    </div>
     <div class="w-embed">
-        <table class="tablee tablesorter" id="myTable">
-            <caption>Interview slots</caption>
-
-            <thead>
-            <tr>
-                <th>Interview start</th>
-                <th>Interview end</th>
-                <th>Reserved</th>
-            </tr>
-            </thead>
-            <tbody>
-
-            {% for interviewslot in interviewlots %}
+        <div style="width: 500px; margin-top: 30px; display: flex; flex-direction: column; justify-content: center; align-items: center; border: 1px solid #303550; border-radius: 3px 3px 0px 0px; padding-bottom: 10px;">
+            <div style="display: flex; width: 100%; justify-content: center; align-items: center; background-color: #303550; padding: 10px 0px; color: #fff;">Interview Slots</div>
+            <table class="" id="" style="">
+                <thead>
                 <tr>
-                    <td><p>{{ interviewslot.start }}</p></td>
-                    <td>{{ interviewslot.end }}</td>
-                    <td>{{ interviewslot.reserved }}</td>
+                    <th>Interview start</th>
+                    <th>Interview end</th>
+                    <th>Reserved</th>
                 </tr>
-            {% endfor %}
+                </thead>
+                <tbody>
 
-
-            </tbody>
-        </table>
-        {% from 'macros.html' import render_field %}
-        <div class="">
-            <form class="int_slot_form" method="POST" action="" style="display: flex;">
-                {{ form.hidden_tag() }}
-                {% for field in form %}
-                    {{ render_field(field) }}
+                {% for interviewslot in interviewlots %}
+                    <tr style="border-bottom: 1px solid #303550; box-shadow: none;">
+                        <td style="width: 200px;">{{ interviewslot.start }}</td>
+                        <td style="width: 200px;">{{ interviewslot.end }}</td>
+                        {% if interviewslot.reserved == True %}
+                        <td style="color: red;">{{ interviewslot.reserved }}</td>
+                        {% else %}
+                        <td style="color: green;">{{ interviewslot.reserved }}</td>
+                        {% endif %}
+                    </tr>
                 {% endfor %}
-                <div class="login_reg">
-                    <button type="submit" id="submit" class="login">Add</button>
-                </div>
-            </form>
+                    <tr style="box-shadow: none;">
+                        <td colspan="3" style="padding: 0px;">
+                            {% from 'macros.html' import render_field %}
+                            <form class="int_slot_form" method="POST" action="" style="display: flex; margin-bottom: 10px; padding-left: 10px;">
+                                {{ form.hidden_tag() }}
+                                {% for field in form %}
+                                    {{ render_field(field) }}
+                                {% endfor %}
+                                <div class="login_reg">
+                                    <button type="submit" id="submit" class="login">Add</button>
+                                </div>
+                            </form>
+                        </td>
+                    </tr>
+
+
+                </tbody>
+            </table>
+        </div>
+        <div class="">
             <br>
             <table class="tablee tablesorter" id="myTable">
                 <caption>Scheduled Interviews</caption>

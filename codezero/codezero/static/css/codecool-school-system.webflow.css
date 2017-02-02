@@ -454,6 +454,7 @@ select {
   color: ;
 }
 
+
 th {
   display: table-cell;
   padding: 20px 0px 20px 5px;
@@ -838,7 +839,9 @@ tr:nth-child(even) {
 }
 
 
-
+#mentor_td {
+  margin-right: 115px;
+}
 
 
 

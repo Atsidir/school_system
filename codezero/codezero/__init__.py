@@ -156,7 +156,7 @@ def mentor_page():
     if form.validate_on_submit():
         InterviewSlot.create(start=form.start.data, end=form.end.data, reserved=False, assigned_mentor=mentor.id)
         return redirect(url_for("mentor_page"))
-    return render_template("mentor_site.html", interviewlots=interviewlots, interviews=interviews, form=form)
+    return render_template("mentor_site.html", interviewlots=interviewlots, interviews=interviews, form=form, mentor = mentor)
 
 
 @app.route('/mentors', methods=["GET", "POST"])
