@@ -56,7 +56,12 @@ class Applicant_methods:
         table = Applicant.select()
         lista = [("APPLICANT ID", "NAME", "CITY", "STATUS")]
         for item in table:
-            lista.append(
-                (item.applicant_id, item.first_name, item.last_name, item.email, item.city, item.status,
-                 item.school.name))
+            if len(item.interview)==0:
+                lista.append(
+                    (item.applicant_id, item.first_name, item.last_name, item.email, item.city, item.status,
+                     item.school.name,'False'))
+            else:
+                lista.append(
+                    (item.applicant_id, item.first_name, item.last_name, item.email, item.city, item.status,
+                     item.school.name, 'True'))
         return lista

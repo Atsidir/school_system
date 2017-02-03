@@ -50,3 +50,6 @@ class interview_methods:
             return False
         Interview.create(applicant=applicant.id, slot=slot.id)
         InterviewSlot.update(reserved=True).where(InterviewSlot.id == slot.id).execute()
+    @classmethod
+    def get_interviews(cls):
+        return  Interview.select()

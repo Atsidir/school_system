@@ -94,96 +94,30 @@
         <table class="tablee">
           <thead>
           <tr>
-            {% for i in LISTA[0] %}
-            <th>{{ i }} <i class="fa fa-angle-down" aria-hidden="true"></i></th>
-            {% endfor %}
+            <th>Mentor name <i class="fa fa-angle-down" aria-hidden="true"></i></th>
+            <th> School<i class="fa fa-angle-down" aria-hidden="true"></i></th>
+
           </tr>
           </thead>
           <tbody>
           {% set x = 0 %}
-          {% for i in LISTA[1:] %}
-          <tr class="{{ class_list[x] }} normal" id="d{{ i[0] }}">
+          {% for mentor in LISTA %}
+          <tr class="{{ class_list[x] }} normal" id="d{{ mentor.id }}">
             <td>
               <div class="bck">
                 <i class="fa fa-user fa-2x fa-border" aria-hidden="true"></i>
               </div>
               <div class="bck">
-                <p class="person">{{ i[0] }}</p>
-                <p class="email">{{ i[0] }}@codecool.com</p>
+                <p class="person">{{ mentor.first_name }} {{ mentor.last_name }}</p>
+                <p class="email">{{ mentor.email }}</p>
               </div>
             </td>
-            <td>{{ i[1] }}</td>
-            <td class="status">mentor</td>
+
+            <td>{{ mentor.school.name }}</td>
+
           </tr>
           {% endfor %}
           </tbody>
-        </table>
-
-        <table class="tableee"
-          <tr>
-            <th>Applicants <i class="fa fa-angle-down" aria-hidden="true"></i></th>
-            <th>School <i class="fa fa-angle-down" aria-hidden="true"></i></th>
-            <th>Status <i class="fa fa-angle-down" aria-hidden="true"></i></th>
-            <th>Age <i class="fa fa-angle-down" aria-hidden="true"></i></th>
-            <th>Mentor ID</th>
-          </tr>
-          <tr class="one">
-            <td>
-              <div class="bck">
-                <i class="fa fa-user fa-2x fa-border" aria-hidden="true"></i>
-              </div>
-              <div class="bck">
-                <p class="person">Matyi</p>
-                <p class="email">matyi@codecool.com</p>
-              </div>
-            </td>
-            <td>Budapest</td>
-            <td class="status">mentor</td>
-            <td>50</td>
-            <td>1dd1w</td>
-          </tr>
-          <tr class="two">
-            <td>
-              <div class="bck">
-                <i class="fa fa-user fa-2x fa-border" aria-hidden="true"></i>
-              </div>
-              <div class="bck">
-                <p class="person">Laci</p>
-                <p class="email">laci@codecool.com</p>
-              </div>
-            <td>Miskolc</td>
-            <td class="status">mentor</td>
-            <td>94</td>
-            <td>23kj3</td>
-          </tr>
-          <tr class="three">
-            <td>
-              <div class="bck">
-                <i class="fa fa-user fa-2x fa-border" aria-hidden="true"></i>
-              </div>
-              <div class="bck">
-                <p class="person">Immi</p>
-                <p class="email">immi@codecool.com</p>
-              </div>
-            <td>Krakow</td>
-            <td class="status">mentor</td>
-            <td>50</td>
-            <td>23o41</td>
-          </tr>
-          <tr class="four">
-            <td>
-              <div class="bck">
-                <i class="fa fa-user fa-2x fa-border" aria-hidden="true"></i>
-              </div>
-              <div class="bck">
-                <p class="person">Zozie</p>
-                <p class="email">zozie@codecool.com</p>
-              </div>
-            <td>Budapest</td>
-            <td class="status">mentor</td>
-            <td>50</td>
-            <td>23o41</td>
-          </tr>
         </table>
       </div>
     </div>

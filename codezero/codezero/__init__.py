@@ -177,11 +177,20 @@ def mentors():
 
 
 @app.route('/users', methods=["GET", "POST"])
+@login_required
 def users():
     LISTA = user_list()
     list_length = int(len(LISTA))
     if request.method == "GET":
         return render_template("users.html", LISTA=LISTA, list_length=list_length, class_list=class_list)
+
+@app.route('/interview', methods=["GET", "POST"])
+@login_required
+def interview():
+    interviews = interview_methods.get_interviews()
+    list_length = int(len(interviews))
+    if request.method == "GET":
+        return render_template("interviews.html", interviews=interviews, list_length=list_length, class_list=class_list)
 
 @app.route('/try', methods=["GET", "POST"])
 def tryy():
