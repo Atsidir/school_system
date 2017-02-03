@@ -109,8 +109,8 @@
               <th>App Code</th>
             <th>School <i class="fa fa-angle-down" aria-hidden="true"></i></th>
             <th>Status <i class="fa fa-angle-down" aria-hidden="true"></i></th>
-            <th>City <i class="fa fa-angle-down" aria-hidden="true"></i></th>
-            <th>Has IntView<i class="fa fa-angle-down" aria-hidden="true"></i></th>
+
+              <th>Has IntView<i class="fa fa-angle-down" aria-hidden="true"></i></th>
           </tr>
           </thead>
           <tbody> 
@@ -141,7 +141,7 @@
                           <button class="status rejected">{{ applicant[5] }}</button>
                       </td>
             {% endif %}
-                  <td>{{ applicant[4] }}</td>
+
                   {% if applicant[7] == "True" %}
                     <td><span style="color: green;">{{ applicant[7]}}</span></td>
                   {% else %}

@@ -50,10 +50,10 @@
             <img src="https://placekitten.com/103/102" style="align-self: flex-start;">
             <div class="profile_data">
                 <p>Username: {{ user.login }}</p>
-                <p>Passw: {{ user.password }}</p>
                 <p>Name: {{ user.applicant[0].first_name }} {{ user.applicant[0].last_name }}</p>
                 <p>School: {{ user.applicant[0].school.name }}</p>
                 <p>Status: <span class="status"> {{ user.applicant[0].status }}</span></p>
+                <p>Interview Date: <span class="status"> {{ user.applicant[0].interview[0].slot.start }}</span></p>
             </div>
         </div>
     </div>
