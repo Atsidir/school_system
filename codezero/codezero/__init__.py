@@ -1,9 +1,9 @@
 from flask import Flask, render_template, request, url_for, redirect, flash, abort
 from peewee import *
-import applicant_methods
-import mentor_methods
-import interview_methods
-import forms
+#import applicant_methods
+#import mentor_methods
+#import interview_methods
+#import forms
 from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user, current_user
 
 try:
@@ -71,52 +71,35 @@ def load_user(user_id):
         return None
 
 
-@app.route('/', methods=['GET', 'POST'])
-def login():
-    # Here we use a class of some kind to represent and validate our
-    # client-side form data. For example, WTForms is a library that will
-    # handle this for us, and we use a custom LoginForm to validate.
-    form = forms.LoginForm()
-    if form.validate_on_submit():
-        # Login and validate the user.
-        # user should be an instance of your `User` class
-
-        try:
-            user = User.get(form.username.data == User.login)
-        except DoesNotExist:
-            flash('Invalid username or password.')
-            return render_template('login.html', form=form)
-        if user.password == form.password.data:
-            login_user(user)
-        else:
-            flash('Invalid password.')
-            return render_template('login.html', form=form)
-
-        # next = request.args.get('next')
-        # is_safe_url should check if the url is safe for redirects.
-        # See http://flask.pocoo.org/snippets/62/ for an example.
-        # if not is_safe_url(next):
-        #    return Flask.abort(400)
-        if current_user.role == 'admin':
-            return redirect(url_for('homepage'))
-        elif current_user.role == 'applicant':
-            return redirect(url_for('user_page'))
-        elif current_user.role == 'mentor':
-            return redirect(url_for('mentor_page'))
-        else:
-            return redirect(url_for('user_page'))
-    return render_template('login.html', form=form)
-
-
 @app.route('/admin', methods=["GET", "POST"])
 @login_required
 def homepage():
     if current_user.role != 'admin':
         abort(404)
-    LISTA = Applicant_methods.get_list()
+    LISTA = Applicant.select()
+    LISTA2 = Mentor.select()
     list_length = int(len(LISTA))
+    list_length2 = int(len(LISTA2))
     if request.method == "GET":
-        return render_template("index.html", LISTA=LISTA, list_length=list_length, class_list=class_list)
+        return render_template("index2.html", LISTA=LISTA, 
+                                                LISTA2=LISTA2, 
+                                                list_length=list_length,
+                                                list_length2=list_length2)
+
+@app.route('/delete_applicant/<app_id>', methods=["GET", "POST"])
+@login_required
+def delete_applicant(app_id):
+    if current_user.role != 'admin':
+        abort(404)
+    user = Applicant.select().where(Applicant.applicant_id == app_id).get()
+    if request.method == "GET":
+        return "Delete is not configured yet. \
+                Instead you are seeing {} {}'s \
+                applicant_id: {} and role: {}".format(
+                                                        user.first_name, 
+                                                        user.last_name, 
+                                                        user.applicant_id, 
+                                                        user.user.role)
 
 
 @app.route("/logout")
@@ -196,6 +179,45 @@ def interview():
 def tryy():
     if request.method == "GET":
         return render_template("try.html")
+
+@app.route('/', methods=["GET", "POST"])
+def login():
+    form = forms.LoginForm()
+    form2 = forms.RegisterForm()
+    if request.method == "POST" and form.validate_on_submit():
+        # Login and validate the user.
+        # user should be an instance of your `User` class
+
+        try:
+            user = User.get(form.username.data == User.login)
+        except DoesNotExist:
+            flash('Invalid username or password.')
+            return render_template('login.html', form=form, form2=form2)
+        if user.password == form.password.data:
+            login_user(user)
+        else:
+            flash('Invalid password.')
+            return render_template('login.html', form=form, form2=form2)
+
+        # next = request.args.get('next')
+        # is_safe_url should check if the url is safe for redirects.
+        # See http://flask.pocoo.org/snippets/62/ for an example.
+        # if not is_safe_url(next):
+        #    return Flask.abort(400)
+        if current_user.role == 'admin':
+            return redirect(url_for('homepage'))
+        elif current_user.role == 'applicant':
+            return redirect(url_for('user_page'))
+        elif current_user.role == 'mentor':
+            return redirect(url_for('mentor_page'))
+        else:
+            return redirect(url_for('user_page'))
+    elif request.method == "POST" and form2.validate_on_submit():
+        if form2.validate_on_submit():
+            flash("You have successfully registered", "success")
+            create_user(form2)
+            return redirect(url_for("login"))
+    return render_template("login.html", form=form, form2=form2)
 
 
 if __name__ == "__main__":
